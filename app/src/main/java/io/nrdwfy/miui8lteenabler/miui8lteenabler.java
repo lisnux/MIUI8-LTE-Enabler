@@ -45,9 +45,15 @@ public class miui8lteenabler implements IXposedHookLoadPackage{
     @Override
     public void handleLoadPackage(final LoadPackageParam lpParam) throws Throwable {
 
+        //Moving to Top to allow 4G on Boot
+        findAndHookMethod("miui.telephony.TelephonyManager", lpParam.classLoader, "isDisableLte", "boolean", new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                param.setResult(false);
+            }
+        });
 
-
-            if(lpParam.packageName.equals("com.android.phone")){
+           if(lpParam.packageName.equals("com.android.phone")){
             XposedBridge.log("[nrdwfy] : com.android.phone Detected. Loaded.");
             findAndHookMethod("com.android.phone.settings.MobileNetworkSettings", lpParam.classLoader, "onCreate", Bundle.class, new XC_MethodHook() {
                 @Override
@@ -72,12 +78,13 @@ public class miui8lteenabler implements IXposedHookLoadPackage{
             XposedBridge.log("[nrdwfy] : com.android.settings Detected. Loaded.");
 
                 //Tricking Telephony Manager to make RadioInfo Know the LTE doesn't disabled.
-                findAndHookMethod("miui.telephony.TelephonyManager", lpParam.classLoader, "isDisableLte", "boolean", new XC_MethodHook() {
+                //v1.1 : Deprecated due to Unflexibility of using TelephonyManager
+                /*findAndHookMethod("miui.telephony.TelephonyManager", lpParam.classLoader, "isDisableLte", "boolean", new XC_MethodHook() {
                     @Override
                     protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                         param.setResult(false);
                     }
-                });
+                });*/
         }else{
             return;
         }
