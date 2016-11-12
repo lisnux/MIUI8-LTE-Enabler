@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("io.nrdwfy.miui8lteenabler", appContext.getPackageName());
+        assertEquals("io.nrdwfy.TelephonyFramework", appContext.getPackageName());
     }
 }
